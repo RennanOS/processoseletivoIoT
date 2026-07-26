@@ -14,8 +14,8 @@ ldr.atten(ADC.ATTN_11DB)
 botao = Pin(BUTTON_PIN, Pin.IN, Pin.PULL_UP)
 
 # Valores ajustados para o Wokwi
-ADC_LIVRE = 1500       # Valor abaixo disso = livre (claro)
-ADC_BLOQUEADO = 2500   # Valor acima disso = bloqueado (escuro)
+ADC_LIVRE = 1500       
+ADC_BLOQUEADO = 2500   
 
 MICRO_PARADA_MS = 5000
 DEBOUNCE_MS = 50
@@ -28,7 +28,10 @@ contador = 0
 linha_bloqueada = False
 inicio_bloqueio = 0
 micro_parada_detectada = False
-ultimo_tempo = 0
+
+# Estado do botão para debounce
+ultimo_estado_botao = 1
+ultimo_tempo_botao = 0
 
 print("Contador de Producao Inicializado")
 
@@ -52,7 +55,7 @@ while True:
     agora = time.ticks_ms()
     
     # -------------------------------------------------
-    # Leitura do Sensor LDR
+    # Sensor LDR
     # -------------------------------------------------
     
     adc = ldr.read()
@@ -82,24 +85,19 @@ while True:
     # Botão de Reset (com debounce)
     # -------------------------------------------------
     
-    if botao.value() == 0:  # Botão pressionado (Pull-Up)
-        time.sleep_ms(DEBOUNCE_MS)  # Debounce
-        
-        if botao.value() == 0:  # Confirma pressionamento
+    estado_atual = botao.value()
+    
+    # Detecta borda de descida (pressionou)
+    if estado_atual == 0 and ultimo_estado_botao == 1:
+        # Debounce
+        time.sleep_ms(DEBOUNCE_MS)
+        if botao.value() == 0:
             resetar_turno()
-            
-            # Aguarda soltar o botão
+            # Aguarda soltar
             while botao.value() == 0:
                 time.sleep_ms(10)
     
-    # -------------------------------------------------
-    # Mantém o sistema vivo (importante para o CI)
-    # -------------------------------------------------
+    ultimo_estado_botao = estado_atual
     
-    # Pequeno delay para não sobrecarregar
+    # Delay para não sobrecarregar
     time.sleep_ms(50)
-    
-    # Opcional: Imprime heartbeat a cada 2 segundos para mostrar que está vivo
-    if time.ticks_diff(agora, ultimo_tempo) > 2000:
-        # print(f"System alive - Contador: {contador}")  # Descomente se quiser debug
-        ultimo_tempo = agora

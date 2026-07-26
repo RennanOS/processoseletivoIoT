@@ -83,15 +83,17 @@ while True:
 
     estado = botao.value()
 
-    if ultimo_estado_botao == 1 and estado == 0:
+    if estado != ultimo_estado_botao:
 
-        contador = 0
-        linha_bloqueada = False
-        inicio_bloqueio = 0
-        micro_parada_detectada = False
+        if ultimo_estado_botao == 1 and estado == 0:
 
-        print("Turno resetado com sucesso. Contadores zerados.")
+            contador = 0
+            linha_bloqueada = False
+            inicio_bloqueio = 0
+            micro_parada_detectada = False
+
+            print("Turno resetado com sucesso. Contadores zerados.")
 
         ultimo_estado_botao = estado
 
-    time.sleep_ms(10)
+    time.sleep_ms(1)

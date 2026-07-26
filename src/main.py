@@ -83,22 +83,15 @@ while True:
 
     estado = botao.value()
 
-    if estado != ultimo_estado_botao:
+    if ultimo_estado_botao == 1 and estado == 0:
 
-        # Aguarda estabilizar
-        if time.ticks_diff(agora, ultima_mudanca_botao) >= DEBOUNCE_MS:
+        contador = 0
+        linha_bloqueada = False
+        inicio_bloqueio = 0
+        micro_parada_detectada = False
 
-            # Detecta somente a transição 1 -> 0
-            if ultimo_estado_botao == 1 and estado == 0:
+        print("Turno resetado com sucesso. Contadores zerados.")
 
-                contador = 0
-                linha_bloqueada = False
-                inicio_bloqueio = 0
-                micro_parada_detectada = False
-
-                print("Turno resetado com sucesso. Contadores zerados.")
-
-            ultimo_estado_botao = estado
-            ultima_mudanca_botao = agora
+        ultimo_estado_botao = estado
 
     time.sleep_ms(1)

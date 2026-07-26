@@ -32,7 +32,6 @@ micro_parada_detectada = False
 
 ultimo_estado_botao = botao.value()
 ultima_mudanca_botao = time.ticks_ms()
-botao_processado = False
 
 print("Contador de Producao Inicializado")
 
@@ -45,25 +44,19 @@ while True:
     agora = time.ticks_ms()
 
     # -------------------------------------------------
-    # Leitura do sensor
+    # Sensor
     # -------------------------------------------------
 
     adc = ldr.read()
 
-    # -------------------------------------------------
-    # Peça entrou
-    # -------------------------------------------------
-
+    # Início da passagem da peça
     if (not linha_bloqueada) and (adc > ADC_BLOQUEADO):
 
         linha_bloqueada = True
         inicio_bloqueio = agora
         micro_parada_detectada = False
 
-    # -------------------------------------------------
-    # Peça saiu
-    # -------------------------------------------------
-
+    # Fim da passagem da peça
     elif linha_bloqueada and (adc < ADC_LIVRE):
 
         linha_bloqueada = False
@@ -85,31 +78,27 @@ while True:
             micro_parada_detectada = True
 
     # -------------------------------------------------
-    # Debounce do botão
+    # Botão (debounce + borda)
     # -------------------------------------------------
 
     estado = botao.value()
 
     if estado != ultimo_estado_botao:
 
-        ultimo_estado_botao = estado
-        ultima_mudanca_botao = agora
+        # Aguarda estabilizar
+        if time.ticks_diff(agora, ultima_mudanca_botao) >= DEBOUNCE_MS:
 
-    if time.ticks_diff(agora, ultima_mudanca_botao) >= DEBOUNCE_MS:
+            # Detecta somente a transição 1 -> 0
+            if ultimo_estado_botao == 1 and estado == 0:
 
-        if estado == 0 and not botao_processado:
+                contador = 0
+                linha_bloqueada = False
+                inicio_bloqueio = 0
+                micro_parada_detectada = False
 
-            contador = 0
-            linha_bloqueada = False
-            micro_parada_detectada = False
-            inicio_bloqueio = 0
+                print("Turno resetado com sucesso. Contadores zerados.")
 
-            print("Turno resetado com sucesso. Contadores zerados.")
+            ultimo_estado_botao = estado
+            ultima_mudanca_botao = agora
 
-            botao_processado = True
-
-        elif estado == 1:
-
-            botao_processado = False
-
-    time.sleep_ms(10)
+    time.sleep_ms(1)

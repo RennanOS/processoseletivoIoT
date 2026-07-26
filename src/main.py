@@ -94,4 +94,4 @@ while True:
 
         ultimo_estado_botao = estado
 
-    time.sleep_ms(1)
+    time.sleep_ms(10)

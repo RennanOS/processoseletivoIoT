@@ -13,9 +13,9 @@ ldr.atten(ADC.ATTN_11DB)
 
 botao = Pin(BUTTON_PIN, Pin.IN, Pin.PULL_UP)
 
-# Ajuste nos limiares para o Wokwi
-ADC_LIVRE = 1200       # Valor abaixo disso = livre (claro)
-ADC_BLOQUEADO = 2000   # Valor acima disso = bloqueado (escuro)
+# Valores ajustados para o Wokwi
+ADC_LIVRE = 1500       # Valor abaixo disso = livre (claro)
+ADC_BLOQUEADO = 2500   # Valor acima disso = bloqueado (escuro)
 
 MICRO_PARADA_MS = 5000
 DEBOUNCE_MS = 50
@@ -28,6 +28,7 @@ contador = 0
 linha_bloqueada = False
 inicio_bloqueio = 0
 micro_parada_detectada = False
+ultimo_tempo = 0
 
 print("Contador de Producao Inicializado")
 
@@ -51,7 +52,7 @@ while True:
     agora = time.ticks_ms()
     
     # -------------------------------------------------
-    # Sensor LDR
+    # Leitura do Sensor LDR
     # -------------------------------------------------
     
     adc = ldr.read()
@@ -62,14 +63,14 @@ while True:
         inicio_bloqueio = agora
         micro_parada_detectada = False
     
-    # Fim da passagem da peça (libertação)
+    # Fim da passagem da peça (libertação) -> CONTA!
     elif linha_bloqueada and adc < ADC_LIVRE:
         linha_bloqueada = False
         contador += 1
         print(f"Peca detectada! Total: {contador}")
     
     # -------------------------------------------------
-    # Micro-parada (5 segundos bloqueado)
+    # Micro-parada
     # -------------------------------------------------
     
     if linha_bloqueada and not micro_parada_detectada:
@@ -91,5 +92,14 @@ while True:
             while botao.value() == 0:
                 time.sleep_ms(10)
     
+    # -------------------------------------------------
+    # Mantém o sistema vivo (importante para o CI)
+    # -------------------------------------------------
+    
     # Pequeno delay para não sobrecarregar
-    time.sleep_ms(10)
+    time.sleep_ms(50)
+    
+    # Opcional: Imprime heartbeat a cada 2 segundos para mostrar que está vivo
+    if time.ticks_diff(agora, ultimo_tempo) > 2000:
+        # print(f"System alive - Contador: {contador}")  # Descomente se quiser debug
+        ultimo_tempo = agora

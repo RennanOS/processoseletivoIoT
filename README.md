@@ -52,11 +52,14 @@ Leitura contínua do LDR<br>
 
 ## Componentes Utilizados na Simulação
 
-Liste os principais componentes definidos no `diagram.json`, por exemplo:
-
-- Tipo de placa utilizada
-- LEDs, botões, sensores, atuadores, etc.
-- Função de cada componente no sistema
+- ESP32 DevKit C v4
+  - Responsável pelo processamento da aplicação e execução do firmware.
+- Sensor Óptico (Photoresistor/LDR)
+  - Detecta a variação da luminosidade provocada pela passagem das peças na esteira.
+- Botão Push Button
+  - Permite realizar o reset manual do turno de produção.
+- Monitor Serial
+  - Exibe todas as mensagens de operação e monitoramento do sistema.
 
 ---
 

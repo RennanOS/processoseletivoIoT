@@ -1,7 +1,7 @@
 ### Identificação do Candidato
 
 - **Nome completo: Rennan Oliveira**
-- **GitHub:RennanOS**
+- **GitHub: RennanOS**
 
 ---
 
@@ -29,17 +29,17 @@ A lógica do sistema é baseada em estados:
 
 Fluxo simplificado:
 
-Inicialização
-      │
-      ▼
-Leitura contínua do LDR
-      │
-      ├── Sensor bloqueado?
-      │         │
-      │         ├── Sim → inicia temporização
-      │         │
-      │         └── Mantido por 5 s → alerta de micro-parada
-      │
+Inicialização <br>
+      │<br>
+      ▼<br>
+Leitura contínua do LDR<br>
+      │<br>
+      ├── Sensor bloqueado?<br>
+      │         │<br>
+      │         ├── Sim → inicia temporização<br>
+      │         │<br>
+      │         └── Mantido por 5 s → alerta de micro-parada<br>
+      │<br>
       ├── Sensor voltou ao normal?
       │         │
       │         └── Incrementa contador

@@ -40,13 +40,13 @@ Leitura contínua do LDR<br>
       │         │<br>
       │         └── Mantido por 5 s → alerta de micro-parada<br>
       │<br>
-      ├── Sensor voltou ao normal?
-      │         │
-      │         └── Incrementa contador
-      │
-      └── Botão pressionado?
-                │
-                └── Reinicia contadores
+      ├── Sensor voltou ao normal?<br>
+      │         │<br>
+      │         └── Incrementa contador<br>
+      │<br>
+      └── Botão pressionado?<br>
+                │<br>
+                └── Reinicia contadores<br>
 
 ---
 

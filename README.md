@@ -65,56 +65,38 @@ Leitura contínua do LDR<br>
 
 ## Decisões Técnicas Relevantes
 
-Explique brevemente decisões importantes tomadas durante o desenvolvimento, como:
+Durante o desenvolvimento foram adotadas algumas decisões para tornar o sistema mais confiável e compatível com os testes automatizados:
 
-- Organização do código
-- Uso de funções, estados ou constantes
-- Estratégias para temporização ou controle lógico
+- Utilização de uma máquina de estados simples para evitar múltiplas contagens da mesma peça.
+- A contagem é realizada somente quando a iluminação retorna ao estado normal, garantindo que a peça tenha passado completamente pelo sensor.
+- A detecção de micro-paradas utiliza temporização não bloqueante com time.ticks_ms(), permitindo que o sistema continue executando todas as demais tarefas simultaneamente.
+- Os valores de referência do sensor foram definidos a partir das leituras observadas durante a simulação no Wokwi, utilizando diretamente os valores do ADC para aumentar a precisão da detecção.
+- As mensagens enviadas pela interface serial seguem exatamente o padrão especificado no enunciado para garantir compatibilidade com os testes automatizados.
 
 ---
 
 ## Resultados Obtidos
 
-Descreva o comportamento final do sistema:
+O sistema desenvolvido atende aos requisitos propostos no desafio.
 
-- O que funciona corretamente
-- Quais requisitos foram atendidos
-- Resultado observado na simulação do Wokwi
+Durante a simulação foi possível verificar:
+
+- Inicialização correta do sistema.
+- Contagem automática das peças ao detectar a passagem pelo sensor.
+- Detecção de micro-paradas quando o sensor permanece bloqueado por mais de cinco segundos.
+- Reset correto dos contadores através do botão físico.
+- Exibição das mensagens esperadas no monitor serial.
+
+Todos os cenários de teste automatizados disponibilizados para o projeto foram executados com sucesso.
 
 ---
 
 ## Comentários Adicionais (Opcional)
 
-Utilize este espaço para comentar, se desejar:
+Durante o desenvolvimento, a principal dificuldade foi compreender o comportamento do sensor óptico utilizado na simulação. Foi necessário realizar testes para identificar a relação entre os valores de luminosidade configurados no Wokwi e os valores efetivamente retornados pelo conversor analógico-digital (ADC), permitindo definir limiares adequados para a detecção da passagem das peças.
 
-- Dificuldades encontradas
-- Limitações da solução
-- Melhorias que você faria com mais tempo
-- Principais aprendizados durante o desafio
+Outro ponto observado foi o comportamento da simulação em relação ao uso de pequenas pausas (time.sleep_ms()), que precisaram ser removidas para garantir compatibilidade com os testes automatizados.
 
----
+Como melhoria futura, o sistema poderia incluir um display para visualização local da produção, armazenamento histórico das medições e comunicação via Wi-Fi ou MQTT para envio dos dados a uma plataforma de monitoramento remoto.
 
-> Este relatório faz parte da avaliação técnica.  
-> Clareza, objetividade e organização são tão importantes quanto o funcionamento do código.
-
----
-
-## Especificação dos Testes Automatizados (Wokwi CI)
-
-Para que o projeto seja validado com sucesso na esteira de integração contínua (CI), o firmware escrito em MicroPython deve interagir corretamente com as leituras dos sensores descritos em cada cenário e enviar as mensagens de status exatas.
-
-### Requisitos Críticos de Implementação
-
-1. **Casamento Exato de Strings:** O Wokwi CI faz uma verificação estrita caractere por caractere. Se houver divergência em maiúsculas/minúsculas, acentuação ou falta de pontuação, o teste irá falhar.
-2. **Arquitetura Não-Bloqueante:** Evite o uso de funções bloqueantes. Elas podem fazer com que o firmware perca a janela de tempo em que o simulador altera o peso, quebrando a sincronia do teste automatizado.
-
----
-
-## Suporte
-
-Em caso de dúvidas:
-
-- Consulte o material dos cursos EAD
-- Leia atentamente este README
-- Analise os logs das GitHub Actions
-- Utilize os canais oficiais para contato com os instrutores
+O desenvolvimento do projeto permitiu reforçar conceitos de sistemas embarcados, leitura de sensores analógicos, programação orientada a eventos, utilização de temporização não bloqueante e validação de firmware por meio de testes automatizados.

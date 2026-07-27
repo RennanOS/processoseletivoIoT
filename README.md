@@ -35,18 +35,18 @@ Inicialização <br>
 Leitura contínua do LDR<br>
       │<br>
       ├── Sensor bloqueado?<br>
-      │         │<br>
-      │         ├── Sim → inicia temporização<br>
-      │         │<br>
-      │         └── Mantido por 5 s → alerta de micro-parada<br>
+      │        <br> │<br>
+      │        <br> ├── Sim → inicia temporização<br>
+      │        <br> │<br>
+      │        <br> └── Mantido por 5 s → alerta de micro-parada<br>
       │<br>
       ├── Sensor voltou ao normal?<br>
-      │         │<br>
-      │         └── Incrementa contador<br>
+      │        <br> │<br>
+      │        <br> └── Incrementa contador<br>
       │<br>
       └── Botão pressionado?<br>
-                │<br>
-                └── Reinicia contadores<br>
+               <br> │<br>
+               <br> └── Reinicia contadores<br>
 
 ---
 
